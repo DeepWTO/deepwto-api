@@ -2,13 +2,11 @@
 .idea
 
 # PyPi publish
-build
-deepwto.egg-info
-dist
-
-# Data
-data
+/build
+/deepwto.egg-info
+/dist
 
 # PyCache
 __pycache__
 
+/data
