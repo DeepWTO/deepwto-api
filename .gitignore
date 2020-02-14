@@ -1,2 +1,12 @@
 # IntelliJ project files
-.idea
+/.idea
+
+# PyPi publish
+/build
+/deepwto.egg-info
+/dist
+
+# PyCache
+__pycache__
+
+/data
