@@ -10,7 +10,7 @@ def read_data(json_path):
             features_content_art = data['art']
             label = data['label']
 
-            # Recommend to use debugger to peak into the dataset rather than
+            # Recommend to use debugger to peek into the dataset rather than
             # using print()
             # print(test_id)
             # print(features_content_gov)
