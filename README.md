@@ -1,5 +1,5 @@
 # DeepWTO API
-Pip installable DeepWTO API that can read, write and query the DeepWTO DynamoDB. The api is built with python-boto3
+Pip installable deepwto-api that can read, write and graph-query the [deepwto db](https://github.com/DeepWTO/deepwto-stream). The api is built with [python-boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html).
 
-## Tp PyPi publish
+## Publish to PyPi
 python -m twine upload dist/*
