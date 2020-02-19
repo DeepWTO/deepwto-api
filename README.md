@@ -1,8 +1,5 @@
-## How to Read Data
-Place `test_data.json` or `train_data.json` under `deepwto/data/`. 
-
-Then use the `explore.py` to peek into the data.
-One can download data from  [Google Drive](https://drive.google.com/drive/u/2/folders/1BpwYLqSBXxSgv8cmItwbohIkfebJr3lX)
+# DeepWTO API
+Pip installable DeepWTO API that can read, write and query the DeepWTO DynamoDB. The api is built with python-boto3
 
 ## Tp PyPi publish
 python -m twine upload dist/*
