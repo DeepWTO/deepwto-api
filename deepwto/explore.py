@@ -1,6 +1,6 @@
-from deepwto import utils
+from deepwto import read_json
 
-data = utils.read_data("./data/test_data.json")
+data = read_json.read_data("./data/test_data.json")
 print(data)
 
 if __name__ == "__main__":
