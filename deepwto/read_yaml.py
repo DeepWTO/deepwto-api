@@ -17,7 +17,8 @@ if __name__ == "__main__":
     client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
 
     for key in keys:
-        article = key
+        print(key)
+        article = "\"{}\"".format(key)
         version = "\"{}\"".format("1.0.0")
         content = "\"\"\"{}\"\"\"".format(data[key])
 
@@ -38,4 +39,5 @@ if __name__ == "__main__":
                         }}
                 """.format(article, version, content)
         res = client.execute_gql(query).json()
-        break
+        print(res)
+
