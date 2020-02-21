@@ -1,7 +1,7 @@
 import yaml
 
 from deepwto.graphql import AppSyncClient
-from deepwto.Constants import *
+from deepwto.constants import *
 
 if __name__ == "__main__":
 

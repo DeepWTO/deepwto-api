@@ -1,19 +1,13 @@
 import requests
 import json
 
-import yaml
-
-with open("./v.1.0.0.yaml", 'r') as stream:
-    try:
-        data = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+from deepwto.constants import available_ds
 
 
 class AppSyncClient:
     latest_version = '1.0.0'
-    available_ds = [int(e) for e in data['available_ds'].split(", ")]
     available_ds_num = len(available_ds)
+    available_ds = available_ds
 
     def __init__(self, api_key, endpoint_url):
         self.api_key = api_key
@@ -62,7 +56,8 @@ if __name__ == "__main__":
     print(client.latest_version)
     print(client.available_ds_num)
 
-    client.get_factual(ds=2)
+    factual = client.get_factual(ds=2)
+    print(factual)
     # ds = 1
     #
     # query = """

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="deepwto",
-    version="0.0.1",
+    version="0.0.4",
     author="zcryoon",
     author_email="syyun@snu.ac.kr",
     description="DeepWTO Database API",
@@ -18,6 +18,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=['pyyaml'],
+    install_requires=["requests"],
     python_requires='>=3.6',
 )
+
