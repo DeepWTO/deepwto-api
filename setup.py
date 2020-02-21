@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="deepwto",
-    version="0.0.4",
+    version="0.0.6",
     author="zcryoon",
     author_email="syyun@snu.ac.kr",
     description="DeepWTO Database API",
