@@ -1,10 +1,18 @@
 import requests
 import json
 
-from deepwto.Constants import *
+import yaml
+
+with open("./v.1.0.0.yaml", 'r') as stream:
+    try:
+        data = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
 
 class AppSyncClient:
+    available_ds = data['available_ds'].split(", ")
+
     def __init__(self, api_key, endpoint_url):
         self.api_key = api_key
         self.endpoint_url = endpoint_url
