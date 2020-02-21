@@ -1,10 +1,14 @@
 import requests
 import json
 
-from deepwto.Constants import *
+from deepwto.constants import available_ds
 
 
 class AppSyncClient:
+    latest_version = '1.0.0'
+    available_ds_num = len(available_ds)
+    available_ds = available_ds
+
     def __init__(self, api_key, endpoint_url):
         self.api_key = api_key
         self.endpoint_url = endpoint_url
@@ -23,28 +27,56 @@ class AppSyncClient:
                                     headers=self.headers)
         return response
 
+    def get_factual(self, ds: int, version: str = "1.0.0"):
+        assert ds in self.available_ds, "Make sure choose one of ds_num"
+        ds = "{}".format(str(ds))
+        version = "\"{}\"".format(version)
+
+        query = """
+                query GetFactual{{
+                    getFactual(
+                        ds: {0}, 
+                        version: {1}) {{
+                               factual
+                            }}
+                        }}
+                """.format(ds, version)
+
+        res = self.execute_gql(query).json()
+        return res['data']['getFactual']['factual']
+
 
 if __name__ == "__main__":
-    client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
-    ds = 1
 
-    query = """
-            mutation CreateFactual {{
-                      createFactual(
-                        input: {{
-                            ds: {0}, 
-                            version: {1}, 
-                            factual: {2}
-                        }}
-                     )
-                      {{
-                        ds
-                        version
-                        factual
-                      }}
-                    }}
-            """.format(1, "\"1.0.4\"", "\"this-is-version4\"")
-    print(type(query))
-    print(query)
-    res = client.execute_gql(query).json()
-    print(res)
+    api_key = "da2-hgitmt7z45he3mlvrltgmwqlhm"
+    endpoint_url = "https://3oedq5prgveqvdax2xtkc2lv34.appsync-api.us-east-1.amazonaws.com/graphql"
+
+    client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
+    print(client.available_ds)
+    print(client.latest_version)
+    print(client.available_ds_num)
+
+    factual = client.get_factual(ds=2)
+    print(factual)
+    # ds = 1
+    #
+    # query = """
+    #         query ListFactual {{
+    #                   listFactual(
+    #                     input: {{
+    #                         ds: {0},
+    #                         version: {1},
+    #                         factual: {2}
+    #                     }}
+    #                  )
+    #                   {{
+    #                     ds
+    #                     version
+    #                     factual
+    #                   }}
+    #                 }}
+    #         """.format(1, "\"1.0.4\"", "\"this-is-version4\"")
+    # print(type(query))
+    # print(query)
+    # res = client.execute_gql(query).json()
+    # print(res)

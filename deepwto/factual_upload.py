@@ -2,7 +2,7 @@
 import pickle
 
 from deepwto.graphql import AppSyncClient
-from deepwto.Constants import *
+from deepwto.constants import *
 
 
 def load_pkl(pickle_path):

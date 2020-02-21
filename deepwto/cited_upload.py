@@ -2,7 +2,7 @@ import json
 import yaml
 
 from deepwto.graphql import AppSyncClient
-from deepwto.Constants import *
+from deepwto.constants import *
 
 
 def read_data(json_path, stop_idx, split):
