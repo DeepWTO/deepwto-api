@@ -1,11 +1,13 @@
 import json
 import yaml
 
+from deepwto.graphql import AppSyncClient
+from deepwto.Constants import *
 
-def read_data(json_path, stop_idx, cited):
+
+def read_data(json_path, stop_idx, split):
     read_idx = 0
-    ds_numbs = []
-    art_numbs = []
+    split = "\"{}\"".format(split)
 
     with open(json_path) as fin:
         for each_line in fin:
@@ -14,60 +16,58 @@ def read_data(json_path, stop_idx, cited):
             features_content_gov = data['gov']
             features_content_art = data['art']
             label = int(data['label'][0])
-            print(test_id, label)
+            # print(test_id, label)
 
             ds_numb = test_id.split('_')[0]
             art_numb = test_id.split('_')[1][1:-1]
-            cited_art_numb = cited[art_numb].split(', ')
-
-            # print(ds_numb, art_numb, label)
-            # print(cited_art_numb)
+            ds_art = ds_numb + '_' + art_numb
+            print(ds_art, label)
 
             if label == 0:
-                # print('DS{}'.format(ds_numb))
-                assert 'DS{}'.format(ds_numb) not in cited_art_numb
+                cited = 'false'
             elif label == 1:
-                print(ds_numb, art_numb, label)
-                print(cited_art_numb)
-                print('DS{}'.format(ds_numb))
-                assert 'DS{}'.format(ds_numb) in cited_art_numb
+                cited = 'true'
 
-            ds_numbs.append(ds_numb)
-            art_numbs.append(art_numb)
+            client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
+
+            ds_art = "\"{}\"".format(ds_art)
+            version = "\"{}\"".format("1.0.0")
+
+            query = """
+                    mutation CreateLabel {{
+                              createLabel(
+                                input: {{
+                                    ds_art: {0},
+                                    version: {1},
+                                    cited: {2},
+                                    split: {3}
+                                }}
+                             )
+                              {{
+                                ds_art
+                                version
+                                cited
+                                split
+                              }}
+                            }}
+                    """.format(ds_art, version, cited, split)
+            res = client.execute_gql(query).json()
+            print(res)
+            assert 'errors' not in res.keys()
 
             if read_idx == stop_idx:
                 break
             else:
                 read_idx += 1
-    ds_numbs_set = set(ds_numbs)
-    art_numbs_set = set(art_numbs)
-
-    ds_numbs_set_list = []
-    for e in ds_numbs_set:
-        ds_numbs_set_list.append(int(e))
-    ds_numbs_set_list.sort()
-
-    art_numbs_set_list = []
-    for e in art_numbs_set:
-        art_numbs_set_list.append(e)
-    art_numbs_set_list.sort()
 
 
 if __name__ == "__main__":
-    with open("./data/cited.yaml", 'r') as stream:
-        try:
-            cited = yaml.safe_load(stream)
-            keys = list(cited.keys())
-            keys.sort()
-
-        except yaml.YAMLError as exc:
-            print(exc)
-
     test_inst_num = 2287
     train_inst_num = 9153
-    read_data("./data/test_data.json", 0, cited)
+    # read_data("./data/test_data.json", 0)
 
-    # read_data("./data/test_data.json", test_inst_num-1, cited)
-    # read_data("./data/train_data.json", train_inst_num-1, cited)
+    # read_data("./data/test_data.json", test_inst_num-1, 'test')
+    read_data("./data/train_data.json", train_inst_num-1, 'train')
 
     pass
+
