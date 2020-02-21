@@ -14,7 +14,7 @@ def read_data(json_path, stop_idx, cited):
             features_content_gov = data['gov']
             features_content_art = data['art']
             label = int(data['label'][0])
-            # print(test_id, label)
+            print(test_id, label)
 
             ds_numb = test_id.split('_')[0]
             art_numb = test_id.split('_')[1][1:-1]
@@ -65,9 +65,9 @@ if __name__ == "__main__":
 
     test_inst_num = 2287
     train_inst_num = 9153
-    # read_data("./data/test_data.json", 0, cited)
+    read_data("./data/test_data.json", 0, cited)
 
     # read_data("./data/test_data.json", test_inst_num-1, cited)
-    read_data("./data/train_data.json", train_inst_num-1, cited)
+    # read_data("./data/train_data.json", train_inst_num-1, cited)
 
     pass
