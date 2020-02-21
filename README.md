@@ -9,6 +9,7 @@ pip install deepwto=0.0.6
 ## API
 
 ```python
+# Email syyun@snu.ac.kr to get API Key and Endpoint URL
 client = deepwto.DataBase(api_key=api_key, endpoint_url=endpoint_url)
 cleint.get_factual(ds=2)
 ```
