@@ -1,7 +1,7 @@
 import requests
 import json
 
-from deepwto.constants import available_ds, available_article
+from deepwto.constants import available_ds, available_article, cited_by_ds
 
 
 class AppSyncClient:
@@ -88,3 +88,7 @@ class AppSyncClient:
 
         res = self.execute_gql(query).json()
         return res['data']['getLabel']['cited']
+
+    @staticmethod
+    def get_cited_by_ds(ds: int):
+        return cited_by_ds[ds]
