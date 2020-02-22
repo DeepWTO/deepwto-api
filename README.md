@@ -1,5 +1,5 @@
 # DeepWTO API
-[![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![Python Version Supported](https://img.shields.io/badge/python-3.6|7|8-blue.svg)](https://www.python.org/downloads/release/python-360/)
 
 Pip installable deepwto-api that can read, write and graph-query the [deepwto database](https://github.com/DeepWTO/deepwto-stream). 
 
