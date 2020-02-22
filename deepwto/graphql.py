@@ -90,5 +90,5 @@ class AppSyncClient:
         return res['data']['getLabel']['cited']
 
     @staticmethod
-    def get_cited(self, ds: int):
+    def get_cited_by_ds(self, ds: int):
         return cited_by_ds[ds]
