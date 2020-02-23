@@ -5,7 +5,7 @@ from deepwto.constants import available_ds, available_article, cited_by_ds
 
 
 class AppSyncClient:
-    latest_version = '1.0.0'
+    latest_version = "1.0.0"
     available_ds_num = len(available_ds)
     available_ds = available_ds
 
@@ -16,25 +16,25 @@ class AppSyncClient:
         self.api_key = api_key
         self.endpoint_url = endpoint_url
         self.headers = {
-                'Content-Type': "application/graphql",
-                'x-api-key': api_key,
-                'cache-control': "no-cache"
+            "Content-Type": "application/graphql",
+            "x-api-key": api_key,
+            "cache-control": "no-cache",
         }
 
     def execute_gql(self, query):
         payload_obj = {"query": query}
         payload = json.dumps(payload_obj)
-        response = requests.request("POST",
-                                    self.endpoint_url,
-                                    data=payload,
-                                    headers=self.headers)
+        response = requests.request(
+            "POST", self.endpoint_url, data=payload, headers=self.headers
+        )
         return response
 
     def get_factual(self, ds: int, version: str = "1.0.0"):
-        assert ds in self.available_ds, "Make sure choose ds number from " \
-                                        "available_ds"
+        assert ds in self.available_ds, (
+            "Make sure choose ds number from " "available_ds"
+        )
         ds = "{}".format(str(ds))
-        version = "\"{}\"".format(version)
+        version = '"{}"'.format(version)
 
         query = """
                 query GetFactual{{
@@ -44,17 +44,20 @@ class AppSyncClient:
                                factual
                             }}
                         }}
-                """.format(ds, version)
+                """.format(
+            ds, version
+        )
 
         res = self.execute_gql(query).json()
-        return res['data']['getFactual']['factual']
+        return res["data"]["getFactual"]["factual"]
 
     def get_article(self, article: str, version: str = "1.0.0"):
-        assert article in self.available_article, "Make sure choose article " \
-                                                  "from available_article "
+        assert article in self.available_article, (
+            "Make sure choose article " "from available_article "
+        )
 
-        article = "\"{}\"".format(article)
-        version = "\"{}\"".format(version)
+        article = '"{}"'.format(article)
+        version = '"{}"'.format(version)
         query = """
                 query GetGATT{{
                     getGATT(
@@ -63,19 +66,23 @@ class AppSyncClient:
                                content
                             }}
                         }}
-                """.format(article, version)
+                """.format(
+            article, version
+        )
 
         res = self.execute_gql(query).json()
-        return res['data']['getGATT']['content']
+        return res["data"]["getGATT"]["content"]
 
-    def get_label(self, ds:int, article: str, version: str = "1.0.0"):
-        assert ds in self.available_ds, "Make sure choose ds number from " \
-                                        "available_ds"
-        assert article in self.available_article, "Make sure choose article " \
-                                                  "from available_article "
+    def get_label(self, ds: int, article: str, version: str = "1.0.0"):
+        assert ds in self.available_ds, (
+            "Make sure choose ds number from " "available_ds"
+        )
+        assert article in self.available_article, (
+            "Make sure choose article " "from available_article "
+        )
 
-        ds_art = "\"{}\"".format(str(ds)+"_"+article)
-        version = "\"{}\"".format(version)
+        ds_art = '"{}"'.format(str(ds) + "_" + article)
+        version = '"{}"'.format(version)
         query = """
                 query GetLabel{{
                     getLabel(
