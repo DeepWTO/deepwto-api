@@ -1,3 +1,5 @@
+from typing import Union, List
+
 import requests
 import json
 
@@ -91,10 +93,44 @@ class AppSyncClient:
                                cited
                             }}
                         }}
-                """.format(ds_art, version)
+                """.format(
+            ds_art, version
+        )
 
         res = self.execute_gql(query).json()
-        return res['data']['getLabel']['cited']
+        return res["data"]["getLabel"]["cited"]
+
+    @staticmethod
+    def get_cited():
+        """
+        Retrieve all cited: {eq: true} items
+        Returns:
+            cited: List[dict]
+                list of dictionaries where each dict has following format:
+                     {
+                      "ds_art": "67_Article XXIII:1",
+                      "version": "1.0.0",
+                      "cited": true,
+                      "split": "train"
+                    }
+        """
+        next_token: Union[None, str] = None
+        cited: List[dict]
+
+        # while next_token:
+        #
+        #     query = """
+        #             query GetLabel{{
+        #                 getLabel(
+        #                     ds_art: {0},
+        #                     version: {1}) {{
+        #                            cited
+        #                         }}
+        #                     }}
+        #             """.format(ds_art, version)
+
+        # res = self.execute_gql(query).json()
+        # return res['data']['getLabel']['cited']
 
     @staticmethod
     def get_cited_by_ds(ds: int):
