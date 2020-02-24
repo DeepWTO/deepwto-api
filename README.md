@@ -49,7 +49,9 @@ client.get_label(article='Article I', ds=2)
 client.get_label(article='Article I', ds=18)
 >>> False
 ```
- 
+## Todos
+ - [ ] Host static documentation on the web to explain API more in detail
+
 ## Publish to PyPi
     # make sure change version in setup.py
     python setup.py sdist bdist_wheel
