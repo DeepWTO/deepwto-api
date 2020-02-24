@@ -237,3 +237,13 @@ class AppSyncClient:
     @staticmethod
     def get_cited_by_ds(ds: int):
         return cited_by_ds[ds]
+
+    @staticmethod
+    def parse_ds(data: List[dict]):
+        ds_nums = []
+        for item in data:
+            ds = int(item['ds_art'].split('_')[0])
+            ds_nums.append(ds)
+        data = list(set(ds_nums))
+        data.sort()
+        return data
