@@ -100,10 +100,11 @@ class AppSyncClient:
         res = self.execute_gql(query).json()
         return res["data"]["getLabel"]["cited"]
 
-    @staticmethod
-    def get_cited():
+    def get_cited(self, contains: str = None):
         """
-        Retrieve all cited: {eq: true} items
+        Retrieve all cited: {eq: true} items or,
+        Retrieve all cited: {eq: true} that contains certain string (Article)
+
         Returns:
             cited: List[dict]
                 list of dictionaries where each dict has following format:
@@ -114,23 +115,124 @@ class AppSyncClient:
                       "split": "train"
                     }
         """
-        next_token: Union[None, str] = None
-        cited: List[dict]
+        nextToken: Union[None, str] = None
+        cited: List[dict] = []
 
-        # while next_token:
-        #
-        #     query = """
-        #             query GetLabel{{
-        #                 getLabel(
-        #                     ds_art: {0},
-        #                     version: {1}) {{
-        #                            cited
-        #                         }}
-        #                     }}
-        #             """.format(ds_art, version)
+        if contains:
+            contains = '"{}"'.format(contains)
+            if not nextToken:
 
-        # res = self.execute_gql(query).json()
-        # return res['data']['getLabel']['cited']
+                query = """
+                       query ListLabels {{
+                         listLabels(
+                           limit: {0}
+                           filter: {{
+                             ds_art: {{contains: {1}}}
+                             cited: {{eq: true}}
+                           }}
+                         ) {{
+                           items {{
+                             ds_art
+                             version
+                             cited
+                             split
+                           }}
+                           nextToken
+                         }}
+                       }}
+                       """.format(
+                    11440, contains
+                )
+                res = self.execute_gql(query).json()
+                cited.extend(res["data"]["listLabels"]["items"])
+                nextToken = '"{}"'.format(res["data"]["listLabels"]["nextToken"])
+
+            while nextToken:
+                query = """
+                       query ListLabels {{
+                         listLabels(
+                           nextToken: {0}
+                           limit: {1}
+                           filter: {{
+                             ds_art: {{contains: {2}}}
+                             cited: {{eq: true}}
+                           }}
+                         ) {{
+                           items {{
+                             ds_art
+                             version
+                             cited
+                             split
+                           }}
+                           nextToken
+                         }}
+                       }}
+                       """.format(
+                    nextToken, 11440, contains
+                )
+                res = self.execute_gql(query).json()
+                cited.extend(res["data"]["listLabels"]["items"])
+                nextToken = '"{}"'.format(res["data"]["listLabels"]["nextToken"])
+
+                if nextToken == '"None"':
+                    break
+            return cited
+
+        if not contains:
+            if not nextToken:
+                query = """
+                        query ListLabels {{
+                          listLabels(
+                            limit: {0}
+                            filter: {{
+                              cited: {{eq: true}}
+                            }}
+                          ) {{
+                            items {{
+                              ds_art
+                              version
+                              cited
+                              split
+                            }}
+                            nextToken
+                          }}
+                        }}
+                        """.format(
+                    11440
+                )
+                res = self.execute_gql(query).json()
+                cited.extend(res["data"]["listLabels"]["items"])
+                nextToken = '"{}"'.format(res["data"]["listLabels"]["nextToken"])
+
+            while nextToken:
+                query = """
+                        query ListLabels {{
+                          listLabels(
+                            nextToken: {0}
+                            limit: {1}
+                            filter: {{
+                              cited: {{eq: true}}
+                            }}
+                          ) {{
+                            items {{
+                              ds_art
+                              version
+                              cited
+                              split
+                            }}
+                            nextToken
+                          }}
+                        }}
+                        """.format(
+                    nextToken, 11440
+                )
+                res = self.execute_gql(query).json()
+                cited.extend(res["data"]["listLabels"]["items"])
+                nextToken = '"{}"'.format(res["data"]["listLabels"]["nextToken"])
+
+                if nextToken == '"None"':
+                    break
+            return cited
 
     @staticmethod
     def get_cited_by_ds(ds: int):
