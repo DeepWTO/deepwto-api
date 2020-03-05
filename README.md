@@ -3,9 +3,12 @@
 
 Pip installable deepwto-api that can read, write and graph-query the [deepwto database](https://github.com/DeepWTO/deepwto-stream). 
 
+Please email [syyun@snu.ac.kr](mailto:syyun@snu.ac.kr) to get an API Key and its endpoint URL of the database.
+
+
 ## Installation
 ```
-pip install deepwto==0.0.7
+pip install deepwto==0.1.1
 ```
 
 ## API
