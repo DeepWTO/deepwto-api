@@ -259,37 +259,32 @@ class AppSyncClient:
         raw_factual_tks = self.gov_tks_dict[ds]
 
         # factualTokenized = ['"test"', '"test2"']
-        factualTokenized_whole = ['"{}"'.format(i) for i in raw_factual_tks]
+        factualTokenized = ['"{}"'.format(i) for i in raw_factual_tks][0:-1]
 
-        for idx in range(len(raw_factual_tks)):
-            factualTokenized = factualTokenized_whole[0:idx]
-            ds = "{}".format(str(ds))
-            version = '"{}"'.format(version)
+        ds = "{}".format(str(ds))
+        version = '"{}"'.format(version)
 
-            query = """
-                    mutation UpdateFactual{{
-                      updateFactual(
-                        input: {{
-                          ds: {0}
-                          version: {1}
-                          factualTokenized: {2}
-                        }}
-                      ) 
-                      {{
-                        ds
-                        version
-                        factual
-                        factualTokenized
-                      }}
+        query = """
+                mutation UpdateFactual{{
+                  updateFactual(
+                    input: {{
+                      ds: {0}
+                      version: {1}
+                      factualTokenized: {2}
                     }}
-                    """.format(
-                ds, version, factualTokenized
-            )
+                  ) 
+                  {{
+                    ds
+                    version
+                    factual
+                    factualTokenized
+                  }}
+                }}
+                """.format(
+            ds, version, factualTokenized
+        )
 
-            res = self.execute_gql(query).json()
-
-            if 'errors' in res.keys():
-                print(res, idx)
+        res = self.execute_gql(query).json()
 
         return res
 
