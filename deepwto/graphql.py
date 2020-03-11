@@ -3,7 +3,7 @@ from typing import Union, List
 import requests
 import json
 
-from deepwto.constants import available_ds, available_article, cited_by_ds
+from deepwto.constants import available_ds, available_article, cited_by_ds, gov_tks_dict, art_tks_dict
 
 
 class AppSyncClient:
@@ -13,6 +13,9 @@ class AppSyncClient:
 
     available_article_num = len(available_article)
     available_article = available_article
+
+    gov_tks_dict = gov_tks_dict
+    art_tks_dict = art_tks_dict
 
     def __init__(self, api_key, endpoint_url):
         self.api_key = api_key
@@ -247,3 +250,53 @@ class AppSyncClient:
         data = list(set(ds_nums))
         data.sort()
         return data
+
+    def update_tokenized_factual(self, ds: int, version: str = "1.0.0"):
+        assert ds in self.available_ds, (
+            "Make sure choose ds number from " "available_ds"
+        )
+        # tokenzied_factual = "{}".format(self.gov_tks_dict[ds])
+        raw_factual_tks = self.gov_tks_dict[ds]
+
+        # factualTokenized = ['"test"', '"test2"']
+        factualTokenized_whole = ['"{}"'.format(i) for i in raw_factual_tks]
+
+        for idx in range(len(raw_factual_tks)):
+            factualTokenized = factualTokenized_whole[0:idx]
+            ds = "{}".format(str(ds))
+            version = '"{}"'.format(version)
+
+            query = """
+                    mutation UpdateFactual{{
+                      updateFactual(
+                        input: {{
+                          ds: {0}
+                          version: {1}
+                          factualTokenized: {2}
+                        }}
+                      ) 
+                      {{
+                        ds
+                        version
+                        factual
+                        factualTokenized
+                      }}
+                    }}
+                    """.format(
+                ds, version, factualTokenized
+            )
+
+            res = self.execute_gql(query).json()
+
+            if 'errors' in res.keys():
+                print(res, idx)
+
+        return res
+
+
+if __name__ == "__main__":
+    endpoint_url = "https://3oedq5prgveqvdax2xtkc2lv34.appsync-api.us-east-1.amazonaws.com/graphql"
+    api_key = "da2-npsbpiuolzcq3nfirg63rmnuoe"
+    client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
+    res = client.update_tokenized_factual(2)
+    print(res)
