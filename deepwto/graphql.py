@@ -257,11 +257,12 @@ class AppSyncClient:
         )
         # tokenzied_factual = "{}".format(self.gov_tks_dict[ds])
         raw_factual_tks = self.gov_tks_dict[ds]
-
         # factualTokenized = ['"test"', '"test2"']
         factualTokenized_whole = ['"{}"'.format(i) for i in raw_factual_tks]
 
-        for idx in range(len(raw_factual_tks)):
+        res_keys = ['data']
+        idx = 0
+        while 'data' in res_keys:
             factualTokenized = factualTokenized_whole[0:idx]
             ds = "{}".format(str(ds))
             version = '"{}"'.format(version)
@@ -287,11 +288,11 @@ class AppSyncClient:
             )
 
             res = self.execute_gql(query).json()
+            res_keys = res.keys()
+            print(idx, res_keys, res)
+            idx += 1
 
-            if 'errors' in res.keys():
-                print(res, idx)
-
-        return res
+        return idx #res
 
 
 if __name__ == "__main__":
@@ -299,4 +300,4 @@ if __name__ == "__main__":
     api_key = "da2-npsbpiuolzcq3nfirg63rmnuoe"
     client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
     res = client.update_tokenized_factual(2)
-    print(res)
+    print(res.keys)
