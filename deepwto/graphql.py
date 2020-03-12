@@ -259,7 +259,8 @@ class AppSyncClient:
         raw_factual_tks = self.gov_tks_dict[ds]
 
         # factualTokenized = ['"test"', '"test2"']
-        factualTokenized = ['"{}"'.format(i) for i in raw_factual_tks][0:-1]
+        # factualTokenized = ['"{}"'.format(i) for i in raw_factual_tks]
+        factualTokenized = json.dumps(raw_factual_tks)
 
         ds = "{}".format(str(ds))
         version = '"{}"'.format(version)
@@ -293,5 +294,10 @@ if __name__ == "__main__":
     endpoint_url = "https://3oedq5prgveqvdax2xtkc2lv34.appsync-api.us-east-1.amazonaws.com/graphql"
     api_key = "da2-npsbpiuolzcq3nfirg63rmnuoe"
     client = AppSyncClient(api_key=api_key, endpoint_url=endpoint_url)
-    res = client.update_tokenized_factual(2)
-    print(res)
+    print(len(available_ds))
+    print(available_ds)
+    print(len(gov_tks_dict.keys()))
+    print(gov_tks_dict.keys())
+    # for ds_num in available_ds:
+    #     res = client.update_tokenized_factual(ds_num)
+    #     print(ds_num, res)
